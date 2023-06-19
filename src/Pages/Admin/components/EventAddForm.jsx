@@ -145,6 +145,7 @@ const EventAddForm = ({ submitEventData, array }) => {
             Schedule Event
           </button>
         )}
+    
       </form>
     </div>
   )

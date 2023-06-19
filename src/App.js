@@ -1,4 +1,4 @@
-import React, { useEffect, useSFtate } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../src/styles/App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './Pages/Login'

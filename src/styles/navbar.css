@@ -84,7 +84,7 @@
   color: #ffffff;
 }
 .main-nav:focus {
-  color: #ffffff;
+  color: #ff0000;
   border-bottom: 3px solid white;
 }
 
