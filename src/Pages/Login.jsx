@@ -14,6 +14,7 @@ import Alert from '@mui/material/Alert'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { useEffect } from 'react'
+import { latestPosterStyle } from '../styles/style-object'
 
 const initialValues = {
   email: '',
@@ -87,7 +88,7 @@ const Login = () => {
           <h1 className="banner__text banner__text--1">Welcome to</h1>
           <h1 className="banner__text banner__text--2">PU EDC</h1>
         </div>
-        <div className="login__container">
+        <div className="login__container" style={latestPosterStyle}>
           <div className="signup-link">
             <p>Don't have an account?</p>
             <Link to="/signup/">Signup</Link>

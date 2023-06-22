@@ -8,6 +8,7 @@ import left from '../../assets/icons/svg/left.svg'
 import { useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import { useEffect } from 'react'
+import { latestPosterStyle } from '../../styles/style-object'
 const SignUp = () => {
   const [email, setEmail] = useState('')
   const [step, setStep] = useState(1)
@@ -35,7 +36,7 @@ const SignUp = () => {
         <h1 className="banner__text banner__text--1">Welcome to</h1>
         <h1 className="banner__text banner__text--2">PU EDC</h1>
       </div>
-      <div className="login__container signup__container">
+      <div className="login__container signup__container" style={latestPosterStyle}>
         <nav className="signup__nav">
           <div className="signup__nav-link">
             <span>

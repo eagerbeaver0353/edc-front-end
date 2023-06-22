@@ -8,11 +8,13 @@ import { useFormik } from 'formik'
 import Chip from '@mui/material/Chip'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
+import MassEventModal from './MassEventModal'
 
 const initialValues = {
   title: '',
   dateTime: '',
   description: '',
+  poster: '',
 }
 
 const EventAddForm = ({ submitEventData, array }) => {
@@ -23,24 +25,32 @@ const EventAddForm = ({ submitEventData, array }) => {
   const token = state.token
   const { data: Data } = GetStartupsUserEmail(token)
   const data = Data?.data?.data
+  const [file, setFile] = useState()
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit, resetForm } = useFormik({
+  const [isOpen, setIsOpen] = useState(false)
+
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit, resetForm, setFieldValue } = useFormik({
     initialValues,
     validationSchema: eventAddSchema,
     onSubmit: async (values) => {
       if (membersData.length !== 0) {
         setMembersError(null)
         setIsLoading(true)
+
+        const formData = new FormData()
+
         const body = {
           title: values.title,
           description: values.description,
           type: 'event',
           dateAndTime: values.dateTime,
           members: membersData,
+          poster: values.poster,
         }
+        Object.keys(body).map((key) => formData.append(key, body[key]))
         //POST REQUEST
         try {
-          const res = await submitEventData(body)
+          const res = await submitEventData(formData)
           resetForm()
           setIsLoading(false)
         } catch (error) {
@@ -52,6 +62,8 @@ const EventAddForm = ({ submitEventData, array }) => {
     },
   })
 
+  console.log('Form Values', values)
+
   const handleMembersData = (values) => {
     const selectedMembers = data?.filter((email) => values.includes(email))
     setMembersData(selectedMembers)
@@ -59,7 +71,7 @@ const EventAddForm = ({ submitEventData, array }) => {
 
   return (
     <div className="  w-full">
-      <form onSubmit={handleSubmit} className="overflow-hidden ">
+      <form onSubmit={handleSubmit} className="overflow-hidden " encType="multipart/form-data">
         <h1 className="w-full text-2xl text-center font-light">Add New Event</h1>
         <div className="grid cols-span-12 my-5  gap-3 w-full max-w-5xl">
           <div className="input__container  w-full col-span-6">
@@ -105,6 +117,18 @@ const EventAddForm = ({ submitEventData, array }) => {
             ) : null}
           </div>
           <div className="input__container w-full  col-span-12">
+            <label htmlFor="poster">Add a Poster Image</label>
+            <input
+              className="border border-gray-400 w-full"
+              type="file"
+              name="poster"
+              placeholder="Upload a poster image"
+              id="poster"
+              accept="image/*"
+              onChange={(e) => setFieldValue('poster', e.currentTarget.files[0])}
+            />
+          </div>
+          <div className="input__container w-full  col-span-12">
             <label htmlFor="tags-filled">Add Members</label>
             <Autocomplete
               multiple
@@ -136,16 +160,27 @@ const EventAddForm = ({ submitEventData, array }) => {
             {membersError ? <p className="input-block__error">{membersError}</p> : null}
           </div>
         </div>
-        {isLoading ? (
-          <button className="admin-add__submit my-5" type="button" disabled>
-            Submitting...
+        <div className="w-full flex">
+          {isLoading ? (
+            <button className="admin-add__submit my-5" type="button" disabled>
+              Submitting...
+            </button>
+          ) : (
+            <button className="admin-add__submit my-5" type="submit" onClick={() => handleSubmit()}>
+              Schedule Event
+            </button>
+          )}
+          <button className="admin-add__submit my-5" type="submit" onClick={() => setIsOpen(!isOpen)}>
+            Mass Event
           </button>
-        ) : (
-          <button className="admin-add__submit my-5" type="submit" onClick={() => handleSubmit()}>
-            Schedule Event
-          </button>
-        )}
+        </div>
       </form>
+      <MassEventModal
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(!isOpen)
+        }}
+      />
     </div>
   )
 }
