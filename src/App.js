@@ -9,6 +9,7 @@ import ApplicationStatus from './Pages/ApplicationStatus'
 import Dashboard from './Pages/Dashboard'
 import Document from './Pages/Document'
 import Report from './Pages/Report'
+import Blog from './Pages/Blog'
 import DashboardAdmin from './Pages/Admin/Dashboard'
 import { Provider } from 'react-redux'
 import store from './components/slices/store'
@@ -44,6 +45,7 @@ const App = () => {
             <Route exact path="/forgot-password/2" element={<ForgotPassword step={2} />} />
             <Route exact path="/forgot-password/3" element={<ForgotPassword step={3} />} />
             <Route exact path="/report" element={<Report />} />
+            <Route exact path="/blog" element={<Blog />} />
             <Route exact path="/" element={<Home />} />
             <Route exact path="/application" element={<ApplicationStatus />} />
             <Route exact path="/dashboard" element={<Dashboard />} />

@@ -82,6 +82,11 @@ const Navigation = () => {
             ) : (
               <>
                 <li className="mt-3">
+                  <NavLink to="/blog" className={activePage === '/blog' ? styles.activeClass : styles.class}>
+                    Blog
+                  </NavLink>
+                </li>
+                <li className="mt-3">
                   <NavLink to="/document" className={activePage === '/document' ? styles.activeClass : styles.class}>
                     Document
                   </NavLink>
