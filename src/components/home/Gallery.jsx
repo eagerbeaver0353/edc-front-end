@@ -11,7 +11,7 @@ const GalleryCard = (props) => {
   const { image } = props
   return (
     <div className="w-80 h-72 rounded-sm">
-      <img src={image} style={{ width: 320, height: 288 }}></img>
+      <img src={image} style={{ width: 320, height: 288 }} alt=''></img>
     </div>
   )
 }
