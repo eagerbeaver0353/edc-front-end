@@ -1,106 +1,108 @@
 import React, { useState } from 'react'
 import { ModalBody } from 'react-bootstrap'
 import { Modal, ModalHeader } from 'reactstrap'
-import { Formik, Field, FieldArray, ErrorMessage } from 'formik';
+import { Formik, Field, FieldArray, ErrorMessage } from 'formik'
 
 const MonthlyReport = () => {
   const [modal, setModal] = useState(false)
-  
+  const [grossMargin, setGrossMargin] = useState(0)
 
-  /* const handleFormSubmit = (e) => {
-    e.preventDefault()
-  }*
-  /*const handleGrossMargin = () => {
-    const TotalCost = parseFloat(manpowerCost) + parseFloat(rentCost) + parseFloat(logisticsCost)
-    const Margin = TotalCost - parseFloat(monthlySale)
-    setGrossMargin(Margin)
+  const initialValues = {
+    fields: [
+      { name: 'Manpower Cost', value: '' },
+      { name: 'Rent', value: '' },
+      { name: 'Logistic Cost', value: '' },
+      { name: 'Monthly Sale', value: '' },
+    ],
   }
-  const handleNetMargin = () => {
-    const TotalCost = parseFloat(manpowerCost) + parseFloat(rentCost) + parseFloat(logisticsCost)
-    let CalculateNetMargin = TotalCost-parseFloat(monthlySale) ;
-    setNetMargin(CalculateNetMargin)
-  }*/
 
-const inputStyleForm ={
-  border:"1px solid green",
-  padding:"12px",
-  borderRadius:"5px"
-}
+  const { fields } = initialValues
+
+  const calculateGrossMargin = (values) => {
+    const margin =
+      parseFloat(values.fields[0].value) +
+      parseFloat(values.fields[1].value) +
+      parseFloat(values.fields[2].value) -
+      parseFloat(values.fields[3].value)
+    setGrossMargin(margin)
+    console.log(margin)
+  }
+
+  const inputStyleForm = {
+    border: '1px solid green',
+    padding: '12px',
+    borderRadius: '5px',
+  }
+
   return (
     <div>
       <Modal size="lg" isOpen={modal} toggle={() => setModal(!modal)}>
         <ModalHeader toggle={() => setModal(!modal)}>Financial Report</ModalHeader>
         <ModalBody>
-  
-      <Formik
-        initialValues={{
-          fields: [
-            { name: 'Manpower Cost', value: '' },
-            { name: 'Rent', value: '' },
-            { name: 'Logistic Cost', value: '' },
-            { name: 'Monthly Sale', value: '' },
-          ],
-        }}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-      >
-        {({ values }) => (
-          <form>
-            <FieldArray name="fields">
-              {({ push, remove }) => (
-                <div>
-                  {values.fields.map((field, index) => (
-                    <div key={index}>
-                      <label htmlFor={`fields[${index}].name`}>{field.name}</label>
-                      <input
-                        type="text"
-                        style={inputStyleForm}
-                        // id={`fields[${index}].name`}
-                        name={`fields[${index}].value`}
-                        // placeholder="enter cost"
-                      />
+      
+        <Formik
+            initialValues={{ fields }}
+            onSubmit={(values) => {
+              console.log(values)
+            }}
+          >
+            {({ values }) => (
+              <form>
+                <FieldArray name="fields">
+                  {({ push, remove }) => (
+                    <div>
+                      {values.fields.map((field, index) => (
+                        <div key={index}>
+                          <label htmlFor={`fields[${index}].name`}>{field.name}</label>
+                          <input
+                            type="number"
+                            style={inputStyleForm}
+                            // id={`fields[${index}].name`}
+                            name={`fields[${index}].value`}
+                            // placeholder="enter cost"
+                          />
 
-                      {/* <label htmlFor={`fields[${index}].value`}>Value:</label>
+                          {/* <label htmlFor={`fields[${index}].value`}>Value:</label>
                       <Field
                         type="text"
                         id={`fields[${index}].name`}
                         name={`fields[${index}].value`}
                       /> */}
 
-                      {index > 2 && (
-                        <button type="button" onClick={() => remove(index)}>
-                          Remove Field
-                        </button>
-                      )}
+                          {index > 2 && (
+                            <button type="button" onClick={() => remove(index)}>
+                              Remove Field
+                            </button>
+                          )}
 
-                      <ErrorMessage
-                        name={`fields[${index}].value`}
-                        component="div"
-                      />
+                          <ErrorMessage name={`fields[${index}].value`} component="div" />
+                        </div>
+                      ))}
+
+                      <button type="button" onClick={() => push({ name: '', value: '' })}>
+                        Add Field
+                      </button>
                     </div>
-                  ))}
+                  )}
+                </FieldArray>
+                <div>
+                  <div>
+                    <h1>Gross Margin Calculator</h1>
+                    <div>
+                      <button onClick={calculateGrossMargin}>Calculate Gross Margin</button>
+                    </div>
+                    <h2>Gross Margin: {grossMargin}</h2>
+                  </div>
 
-                  <button type="button" onClick={() => push({ name: '', value: '' })}>
-                    Add Field
-                  </button>
+                  <lable>Net Margin</lable>
+                  <input />
                 </div>
-              )}
-              
-            </FieldArray>
-             <div>
-              <lable>Gross Margin</lable>
-               <input/>
-              <lable>Gross Margin</lable>
-               <input/>
-             </div>
 
-            <button type="submit">Submit</button>
-            </form>
+                <button type="submit">Submit</button>
+              </form>
             )}
           </Formik>
-    
-         </ModalBody>
+        </ModalBody>
       </Modal>
       <button
         className="btn"
@@ -109,7 +111,6 @@ const inputStyleForm ={
       >
         Monthly Report
       </button>
-      
     </div>
   )
 }
