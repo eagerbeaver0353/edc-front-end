@@ -64,6 +64,7 @@ export const adminAddSchema = Yup.object({
       excludeEmptyString: false,
     })
     .required('Please enter a Phone number'),
+  role:Yup.string().required('required')
 })
 
 export const meetingAddSchema = Yup.object({
