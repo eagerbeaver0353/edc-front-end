@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
 import Header from '../components/common/Header'
 import Navigation from '../components/Layout/Navbar'
 import Footer from '../components/Layout/Footer'
@@ -9,6 +8,9 @@ import Spinner from '../components/Layout/Spinner'
 import { GetFinanceDetails, GetUserStartupStatus } from '../Api/Post'
 import MaterialReactTable from 'material-react-table'
 import { Box } from '@mui/material'
+import MonthlyReport from './Admin/components/MonthlyReport'
+
+
 const App = () => {
   const { state } = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(true)
@@ -121,6 +123,9 @@ const App = () => {
                   disabled
                 />
               </div>
+            </div>
+            <div>
+              <MonthlyReport/>
             </div>
 
             <div className="max-w-7xl mx-auto w-full md:overscroll-none overflow-hidden justify-center">
