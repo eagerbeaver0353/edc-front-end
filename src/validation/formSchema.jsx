@@ -156,3 +156,16 @@ export const adminStageTwoForm = Yup.object({
   numOfEmployees: Yup.number().required('This field is required'),
   folderLink: Yup.string().required('This field is required'),
 })
+
+
+
+// for report section
+export const reportValidationSchema = Yup.object().shape({
+    fields: Yup.array().of(
+      Yup.object().shape({
+        value: Yup.number()
+          .typeError('Value must be a number')
+          .required('Field value is required'),
+      })
+    ),
+  });

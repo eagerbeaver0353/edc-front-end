@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { ModalBody } from 'react-bootstrap'
+import { reportValidationSchema } from '../../../validation/formSchema'
 import { Modal, ModalHeader } from 'reactstrap'
 import { Formik, Field, FieldArray, ErrorMessage } from 'formik'
+import '../styles/monthlyReport.css'
+import '../styles/adminAddForm.scss'
 
 const MonthlyReport = () => {
   const [modal, setModal] = useState(false)
   const [grossMargin, setGrossMargin] = useState(0)
+  const [netMargin, setNetMargin] = useState(0)
 
   const initialValues = {
     fields: [
@@ -16,32 +20,35 @@ const MonthlyReport = () => {
     ],
   }
 
-  const { fields } = initialValues
-
   const calculateGrossMargin = (values) => {
+    const { fields } = values
     const margin =
-      parseFloat(values.fields[0].value) +
-      parseFloat(values.fields[1].value) +
-      parseFloat(values.fields[2].value) -
-      parseFloat(values.fields[3].value)
+      parseFloat(fields[0].value) +
+      parseFloat(fields[1].value) +
+      parseFloat(fields[2].value) -
+      parseFloat(fields[3].value)
     setGrossMargin(margin)
     console.log(margin)
   }
 
-  const inputStyleForm = {
-    border: '1px solid green',
-    padding: '12px',
-    borderRadius: '5px',
+  const calculateNetMargin = (values) => {
+    const { fields } = values
+    const netMarginValue = parseFloat(fields[3].value) - parseFloat(grossMargin)
+    setNetMargin(netMarginValue)
+    console.log(netMarginValue)
   }
+const netMarginStyle = {
+    color: netMargin < 0 ? 'red' : 'green',
+  };
 
   return (
     <div>
       <Modal size="lg" isOpen={modal} toggle={() => setModal(!modal)}>
         <ModalHeader toggle={() => setModal(!modal)}>Financial Report</ModalHeader>
         <ModalBody>
-      
-        <Formik
-            initialValues={{ fields }}
+          <Formik
+            initialValues={initialValues}
+            validationSchema={reportValidationSchema}
             onSubmit={(values) => {
               console.log(values)
             }}
@@ -52,24 +59,25 @@ const MonthlyReport = () => {
                   {({ push, remove }) => (
                     <div>
                       {values.fields.map((field, index) => (
-                        <div key={index}>
-                          <label htmlFor={`fields[${index}].name`}>{field.name}</label>
-                          <input
+                        <div
+                          key={index}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            marginBottom: '10px',
+                            width: '100%',
+                          }}
+                        >
+                          <label htmlFor={`fields[${index}].name`} style={{ width: '100px' }}>
+                            {field.name}
+                          </label>
+                          <Field
                             type="number"
-                            style={inputStyleForm}
-                            // id={`fields[${index}].name`}
+                            className="border border-gray-400"
                             name={`fields[${index}].value`}
-                            // placeholder="enter cost"
                           />
 
-                          {/* <label htmlFor={`fields[${index}].value`}>Value:</label>
-                      <Field
-                        type="text"
-                        id={`fields[${index}].name`}
-                        name={`fields[${index}].value`}
-                      /> */}
-
-                          {index > 2 && (
+                          {index > 3 && (
                             <button type="button" onClick={() => remove(index)}>
                               Remove Field
                             </button>
@@ -79,26 +87,35 @@ const MonthlyReport = () => {
                         </div>
                       ))}
 
-                      <button type="button" onClick={() => push({ name: '', value: '' })}>
+                      <button type="button" className="button" onClick={() => push({ name: '', value: '' })}>
                         Add Field
                       </button>
                     </div>
                   )}
                 </FieldArray>
-                <div>
+                <div style={{ width: '100%', marginTop: '20px' }}>
                   <div>
-                    <h1>Gross Margin Calculator</h1>
+                    <h1>Gross Margin</h1>
                     <div>
-                      <button onClick={calculateGrossMargin}>Calculate Gross Margin</button>
+                      <button type="button" className="button" onClick={() => calculateGrossMargin(values)}>
+                        Gross Margin
+                      </button>
                     </div>
                     <h2>Gross Margin: {grossMargin}</h2>
+                
+                    <h1>Net Margin Calculator</h1>
+                    <div>
+                      <button type="button" className="button" onClick={() => calculateNetMargin(values)}>
+                        Calculate Net Margin
+                      </button>
+                    </div>
+                    <h2 style={netMarginStyle}>Net Margin: {netMargin}</h2>
                   </div>
-
-                  <lable>Net Margin</lable>
-                  <input />
                 </div>
 
-                <button type="submit">Submit</button>
+                <button type="submit" className="button">
+                  Submit
+                </button>
               </form>
             )}
           </Formik>
