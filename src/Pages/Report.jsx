@@ -123,10 +123,11 @@ const App = () => {
                   disabled
                 />
               </div>
-            </div>
-            <div>
+              <div>
               <MonthlyReport/>
             </div>
+            </div>
+            
 
             <div className="max-w-7xl mx-auto w-full md:overscroll-none overflow-hidden justify-center">
               <ReportTable data={dataArray} />

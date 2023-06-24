@@ -165,7 +165,7 @@ export const reportValidationSchema = Yup.object().shape({
       Yup.object().shape({
         value: Yup.number()
           .typeError('Value must be a number')
-          .required('Field value is required'),
+          .required('required'),
       })
     ),
   });

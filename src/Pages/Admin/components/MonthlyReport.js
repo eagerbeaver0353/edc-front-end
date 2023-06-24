@@ -37,9 +37,9 @@ const MonthlyReport = () => {
     setNetMargin(netMarginValue)
     console.log(netMarginValue)
   }
-const netMarginStyle = {
+  const netMarginStyle = {
     color: netMargin < 0 ? 'red' : 'green',
-  };
+  }
 
   return (
     <div>
@@ -68,48 +68,43 @@ const netMarginStyle = {
                             width: '100%',
                           }}
                         >
-                          <label htmlFor={`fields[${index}].name`} style={{ width: '100px' }}>
+                          <label htmlFor={`fields[${index}].name`} className="labelStyle">
                             {field.name}
                           </label>
-                          <Field
-                            type="number"
-                            className="border border-gray-400"
-                            name={`fields[${index}].value`}
-                          />
+                          <Field type="number" className="field-input" name={`fields[${index}].value`} />
 
+                          <div className='removebtn'>
                           {index > 3 && (
-                            <button type="button" onClick={() => remove(index)}>
+                            <button type="button" className="removebutton" onClick={() => remove(index)}>
                               Remove Field
                             </button>
                           )}
+                          </div>
 
-                          <ErrorMessage name={`fields[${index}].value`} component="div" />
+                          <ErrorMessage name={`fields[${index}].value`} component="div"  style={{ color: 'red' }}/>
                         </div>
                       ))}
 
-                      <button type="button" className="button" onClick={() => push({ name: '', value: '' })}>
+                      <button type="button" className="removebutton" onClick={() => push({ name: '', value: '' })}>
                         Add Field
                       </button>
                     </div>
                   )}
                 </FieldArray>
                 <div style={{ width: '100%', marginTop: '20px' }}>
-                  <div>
-                    <h1>Gross Margin</h1>
-                    <div>
+                  <div className="margin">
+                    <div className="grossMargin">
                       <button type="button" className="button" onClick={() => calculateGrossMargin(values)}>
                         Gross Margin
                       </button>
+                      <h2>Gross Margin: {grossMargin}</h2>
                     </div>
-                    <h2>Gross Margin: {grossMargin}</h2>
-                
-                    <h1>Net Margin Calculator</h1>
-                    <div>
+                    <div className="netMargin">
                       <button type="button" className="button" onClick={() => calculateNetMargin(values)}>
                         Calculate Net Margin
                       </button>
+                      <h2 style={netMarginStyle}>Net Margin: {netMargin}</h2>
                     </div>
-                    <h2 style={netMarginStyle}>Net Margin: {netMargin}</h2>
                   </div>
                 </div>
 
@@ -123,7 +118,7 @@ const netMarginStyle = {
       </Modal>
       <button
         className="btn"
-        style={{ background: '#B4CD93', color: 'black', padding: '10px' }}
+        style={{ background: '#3B82F6', color: 'white', padding: '10px' }}
         onClick={() => setModal(true)}
       >
         Monthly Report
