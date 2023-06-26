@@ -3,21 +3,36 @@ import { AuthContext } from '../../../context/AuthContext'
 import { CreateNewAdmin, GetAllAdmin } from '../../../Api/Post'
 import { adminAddSchema } from '../../../validation/formSchema'
 import '../styles/adminAddForm.scss'
-import { useFormik } from 'formik'
-import { Alert, Snackbar } from '@mui/material'
+import { useFormik,Field, Formik } from 'formik'
+import { Alert, Select, Snackbar } from '@mui/material'
 import Chip from '@mui/material/Chip'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 
+
 const AdminAddModal = ({ isOpen, onClose }) => {
-  const initialValues = {
+
+const dropOptions = [
+  { value: '', label: 'Not Select' }, // Option for "not select"
+  { value: 'role 1', label: 'role 1' },
+  { value: 'role 2', label: 'role 2' },
+  { value: 'role 3', label: 'role 3' },
+  { value: 'role 4', label: 'role 4' },
+  { value: 'role 5', label: 'role 5' },
+  { value: 'role 6', label: 'role 6' },
+  { value: 'role 7', label: 'role 7' },
+  { value: 'role 8', label: 'role 8' },
+  
+]
+const initialValues = {
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     phoneNumber: '',
+    role:''
   }
   const { state } = useContext(AuthContext)
   const { refetch } = GetAllAdmin(state.token)
@@ -37,6 +52,13 @@ const AdminAddModal = ({ isOpen, onClose }) => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
   }
+  const dropDownStyle={
+    backgroundColor: "#f3ebeb",
+    borderRadius: "5px",
+    padding: "0.3rem 3rem",
+    outline: "none",
+    border: "1px solid grey"
+}
   const handleCloseAlert = (event, reason) => {
     if (reason === 'clickaway') {
       return
@@ -73,6 +95,7 @@ const AdminAddModal = ({ isOpen, onClose }) => {
   })
 
   return (
+    <Formik>
     <div>
       <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseAlert}>
         <Alert variant="filled" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
@@ -95,8 +118,7 @@ const AdminAddModal = ({ isOpen, onClose }) => {
               </Snackbar>
               <form onSubmit={handleSubmit} className="admin-add__form">
                 <h1
-                  className="w-full text-2xl text-center font-light
-        "
+                  className="w-full text-2xl text-center font-light"
                 >
                   Add New Admin
                 </h1>
@@ -180,6 +202,29 @@ const AdminAddModal = ({ isOpen, onClose }) => {
                       <p className="input-block__error">{errors.password}</p>
                     ) : null}
                   </div>
+                  {/* for dropdown part */}
+                  <div className="input__container col-span-6">
+                    <label htmlFor="lastName">Role</label>
+                    <Field
+                     as="select"
+                     style={dropDownStyle}
+                     name="role"
+                     value={values.role}
+                     onChange={handleChange}
+                     onBlur={handleBlur}
+                    >
+                     {dropOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                     ))}
+                    </Field>
+                  
+                    {errors.role && touched.role ? (
+                      <p className="input-block__error">{errors.role}</p>
+                    ) : null}
+                  </div>
+                  {/* for branch */}
                   <div className="col-span-12  mb-5">
                     <label htmlFor="tags-filled">Branches</label>
                     <Autocomplete
@@ -229,6 +274,7 @@ const AdminAddModal = ({ isOpen, onClose }) => {
         </Box>
       </Modal>
     </div>
+    </Formik>
   )
 }
 
